@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- link  -->
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <!-- js -->
+    <script type="text/javascript" src="bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+
+    <script>
+        $(document).ready(function(){
+			count();
+				function count(){
+				var countString=localStorage.getItem("mybed");
+					if(countString){
+						var countArray=JSON.parse(countString);
+						var totalquantity=0;
+						$.each(countArray,function(i,v){
+							var quantity=v.qty;
+							 totalquantity+=quantity;
+						})
+						$("#checkouttext").html('('+totalquantity+')');
+
+					}
+
+				}
+
+			$(".addtocart").click(
+				function(){
+					var name=$(this).data('name');
+					var price=$(this).data('price');
+					var id=$(this).data('id');
+					var bed={
+						id:id,
+						name:name,
+						price:price,
+						qty:1
+					}
+
+					var bedString=localStorage.getItem("mybed");
+					var bedArray;
+					if(bedString==null){
+						bedArray=Array();
+					}else{
+						bedArray=JSON.parse(bedString);
+					}
+					var status=false;
+
+					$.each(bedArray,function(i,v){
+						if(id==v.id){
+							status=true;
+							v.qty++;
+						}
+					})
+
+					if(!status){
+							bedArray.push(bed);
+						}
+
+					
+					var beddata=JSON.stringify(
+						bedArray);
+					localStorage.setItem("mybed",beddata);
+					count();
+			})
+
+
+		})
+    </script>
+    <title>Cofy House</title>
+</head>
+<body id="bgin">
+    <!-- nav -->
+    <nav>
+        <div class="container">
+            <a href="checout.html" style="float: left;">Shopping Cart </a>
+            <a href="index.html" style="float:right;" >shop</a><span id="checkouttext" class="text-white"></span>
+        </div>
+    </nav>
+    <!-- body  -->
+    
+
+    <div class="container">
+        <h1 class="text-center text-white">Our product</h1>
+    </div>
+<br>
+<br>
+    <div class="container">
+        <div class="row">
+            
+            
+            <div class="col-xl-3 col-lg-3 col-md-3 mb-4 text-white">
+                <img src="images/dondra-queen-bed.jpg" class="card-img-top img-fluid" alt="..." style="height: 150px; width: 250px;">
+                <p> Lex Bed XL</p>
+                <p>price 50000ks</p>
+                <button class="addtocart btn-primary" data-name="Lex Bed XL" data-price="50000" data-id="1">add to cart </button>
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-3 text-white">
+                <img src="images/bed2.jpg" class="card-img-top img-fluid" alt="..." style="height: 150px; width: 250px;" >
+                <p>Premium Bed</p>
+                <p>price 150000ks</p>
+                <button class="addtocart btn-primary" data-name="Premium Bedo" data-price="150000" data-id="2">add to cart </button>
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-3 text-white">
+                <img src="images/bed4.jpg" class="card-img-top img-fluid" alt="..." style="height: 150px; width: 250px;" >
+                <p>Royaloak Aletta Queen Size Bed</p>
+                <p>price 350000ks</p>
+                <button class="addtocart btn-primary" data-name="Royaloak Aletta Queen Size Bed" data-price="350000" data-id="3">add to cart </button>
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-3 text-white ">
+                <img src="images/bed3.jpg" class="card-img-top img-fluid" alt="..." style="height: 150px; width: 250px;" >
+                <p>Coolmore Queen Bed</p>
+                <p>price 750000ks</p>
+                <button class="addtocart btn-primary" data-name="Coolmore Queen Bed" data-price="350000" data-id="3">add to cart </button>
+            </div> 
+        </div>
+    </div>
+</body>
+</html>

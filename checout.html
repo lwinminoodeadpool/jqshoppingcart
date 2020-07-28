@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- link  -->
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <!-- js -->
+    <script type="text/javascript" src="bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+    <script>
+        
+		$(document).ready(function(){
+			
+            $(".order").click(function(){
+           if (order==true) {
+               
+           }
+ });
+           showtable();
+           function showtable(){
+
+               var bedString=localStorage.getItem("mybed");
+           if(bedString){
+               var bedArray=JSON.parse(bedString);
+               var html='';
+               var total=0;
+               var j=1;
+               $.each(bedArray,function(i,v){
+                   var id=v.id;
+                   var name=v.name;
+                   var price=v.price;
+                   var qty=v.qty;
+                   var Subtotal=price*qty;
+                   total+=Subtotal;
+                   html+=`<tr>
+                   <td>${j++}</td>
+                   <td>${name}</td>
+                   <td>${price}</td>
+                   <td><button class="sub" data-id=${i}>-</button>  ${qty}
+                    <button class="add" data-id=${i}>+</button>
+                   </td>	
+                   <td>${Subtotal}</td>					
+                   </tr>`;
+
+
+               });
+               
+                html+=`<tr>
+               <td colspan="4">Total</td>
+               <td>${total}</td>
+               </tr>`
+
+               html+=`<tr>
+                   <td colspan="5"><button class="clear">Order</button></td>
+               </tr>`
+
+               $("#bedlist").html(
+                   html);
+               // $("#table_total").html(html);
+           } else 
+           {
+               $("#bedlist").html('');
+               $("#table_total").html('');
+           }
+           }
+           
+           $("#bedlist").on('click','.add',function(){
+               
+               var id=$(this).data('id');
+               
+               var bedString=localStorage.getItem("mybed");
+                   if(bedString){
+                       var bedArray=JSON.parse(bedString);
+                       
+                       $.each(bedArray,function(i,v){
+                               if (id==i) {
+                                   var quntity=v.qty;
+                                   quntity++;
+                           bedArray[id].qty=quntity;
+
+                               }
+                       })
+                   
+
+                       localStorage.setItem('mybed',JSON.stringify(bedArray));
+                       showtable();
+               
+                   }
+
+           })
+
+$("#bedlist").on('click','.sub',function(){
+               // alert("u just clicked add button");
+               var id=$(this).data('id');
+               //alert(id);
+               var bedString=localStorage.getItem("mybed");
+                   if(bedString){
+                       var bedArray=JSON.parse(bedString);
+                       
+                       $.each(bedArray,function(i,v){
+                               if (id==i) {
+                                   var quntity=v.qty;
+                                   quntity--;
+                                   
+                                   bedArray[id].qty=quntity;
+
+
+                               }
+                               if (quntity==0) {
+                                   bedArray.splice(id,1);
+                               }
+                       })
+                   
+
+
+                       localStorage.setItem('mybed',JSON.stringify(bedArray));
+                       showtable();
+               
+                   }
+
+           })
+           $("#bedlist").on('click','.clear',function(){
+               localStorage.getItem("mybed");
+               if(confirm("Your order success! Click oK")==true){
+                   localStorage.removeItem("mybed");
+                   showtable();
+               }
+           })
+
+           
+       })
+
+   
+    </script>
+    <title>Cofy House-checkout</title>
+</head>
+
+<body>
+    <h1 class="text-center"> <a href="index.html" style="float: left;">shop</a> Shopping Cart </h1>
+    <h3>Your Orders </h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Qty</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody id="bedlist"></tbody>
+        <tbody id="table_total"></tbody>
+    </table>
+</body>
+</html>
